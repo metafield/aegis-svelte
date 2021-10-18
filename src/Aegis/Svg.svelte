@@ -10,6 +10,7 @@
   height={props.height}
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
+  on:mousemove
 >
   <title>{props.title}</title>
   <desc>{props.desc}</desc>
