@@ -1,10 +1,23 @@
 <script lang="ts">
-  import type { Vector } from 'vector2d';
-  export let pos: Vector;
-  let w = 100;
-  let h = 20;
-  $: x = pos.x;
-  $: y = pos.y;
+  import { SCALE } from '../Store/game';
+  export let x;
+  export let y;
+
+  $: width = 100 * $SCALE;
+  $: height = 20 * $SCALE;
 </script>
 
-<path d={`M ${x - w / 2} ${y} h ${w} v ${h} h ${-w} v ${-h}`} />
+<svg {x} {y} {width} {height} viewBox={`0 0 ${width}  ${height}`}>
+  <rect {width} {height} />
+</svg>
+
+<style>
+  svg {
+    fill: none;
+  }
+
+  rect {
+    stroke: white;
+    stroke-width: 6px;
+  }
+</style>

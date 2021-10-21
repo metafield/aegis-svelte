@@ -1,40 +1,46 @@
 <script lang="ts">
   import { Vector } from 'vector2d';
-  import Block from './Prefabs/block.svelte';
   import Cannon from './Prefabs/Cannon.svelte';
-  import Svg from './Svg.svelte';
+  import Target from './Prefabs/Target.svelte';
+  import { mouse, target } from './Store/game';
 
-  const mouse = new Vector(0, 0);
   let player = new Vector(0, 520);
-  let cannon = new Vector(400, 520);
 
   function handleMousemove(event) {
-    console.log('hmm');
-    mouse.x = event.offsetX;
-    mouse.y = event.offsetY;
+    mouse.set({ x: event.offsetX, y: event.offsetY });
     player.x = event.offsetX;
+  }
+
+  function handleMousedown(event) {
+    target.set(new Vector(event.offsetX, event.offsetY));
   }
 </script>
 
-<Svg
-  props={{
-    title: 'Game Manager',
-    desc: 'Main Canvas',
-    style: 'background-color: #222;',
-    height: '600',
-  }}
-  on:mousemove={handleMousemove}
->
-  <g id="lines" style="stroke: white; fill: none;">
-    <text x="50" y="50">{`${mouse.x} ${mouse.y}`}</text>
-    <!-- <Block pos={player} /> -->
-    <Cannon pos={cannon} {mouse} />
-    <Cannon pos={new Vector(cannon.x - 100, cannon.y)} {mouse} />
-  </g>
-</Svg>
+<div id="container">
+  <svg
+    id="game"
+    height="600"
+    width="800"
+    viewBox="0 0 800 600"
+    on:mousemove={handleMousemove}
+    on:mousedown={handleMousedown}
+  >
+    <text x="20" y="20">mouse {$mouse.x} - {$mouse.y}</text>
+
+    <Target pos={$target} />
+
+    <Cannon pos={new Vector(400 - 45, 600 - 30)} />
+  </svg>
+</div>
 
 <style>
+  #game {
+    background-color: #222;
+  }
   text {
-    color: white;
+    stroke: white;
+  }
+  #container {
+    height: 800px;
   }
 </style>
