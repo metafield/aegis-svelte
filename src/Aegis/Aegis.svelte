@@ -2,9 +2,10 @@
   import { Vector } from 'vector2d';
   import Cannon from './Prefabs/Cannon.svelte';
   import Target from './Prefabs/Target.svelte';
-  import { mouse, target } from './Store/game';
+  import { mouse, target, outline, hitBoxes } from './Store/game';
 
   let player = new Vector(0, 520);
+  $: gameObjects = $outline;
 
   function handleMousemove(event) {
     mouse.set({ x: event.offsetX, y: event.offsetY });
@@ -13,6 +14,7 @@
 
   function handleMousedown(event) {
     target.set(new Vector(event.offsetX, event.offsetY));
+    // add target to the canvas and the outliner
   }
 </script>
 
@@ -27,9 +29,21 @@
   >
     <text x="20" y="20">mouse {$mouse.x} - {$mouse.y}</text>
 
-    <Target pos={$target} />
-
+    <Target pos={$target} id="boop" />
     <Cannon pos={new Vector(400 - 45, 600 - 30)} />
+    {#each gameObjects as { Element, props }}
+      <Element {...props} />
+    {/each}
+
+    {#each $hitBoxes as { pos, size }}
+      <rect
+        x={pos.x}
+        y={pos.y}
+        width={size.x}
+        height={size.y}
+        style="stroke: purple; stroke-width: 1px; fill: transparent; "
+      />
+    {/each}
   </svg>
 </div>
 
