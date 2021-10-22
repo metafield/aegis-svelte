@@ -1,18 +1,31 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import { Vector } from 'vector2d';
-  import { SCALE, target } from '../Store/game';
+  import { addToOutline, SCALE, target } from '../Store/game';
+  import Missile from './Missile.svelte';
   export let pos: Vector;
   let gunW = 8 * $SCALE;
   let gunH = 60 * $SCALE;
   let baseW = 90 * $SCALE;
   let baseH = 20 * $SCALE;
 
+  // state and store
+  let prevTarget: Vector;
+  const unsubscribe = target.subscribe((newTarget) => {
+    // do something
+    if (prevTarget) fire();
+    prevTarget = newTarget;
+  });
+  onDestroy(unsubscribe);
+
+  // #region: Active Variables
   $: x = pos.x;
   $: y = pos.y;
   let gunOrigin = new Vector(baseW / 2 + x, baseH / 2 + y);
   $: {
     gunOrigin.x = baseW / 2 + x;
     gunOrigin.y = baseH / 2 + y;
+    console.log(gunOrigin);
   }
 
   $: tempTarget = $target || new Vector(800, 10);
@@ -20,6 +33,22 @@
   $: targetAngle =
     Math.atan2(lookDirection.y, lookDirection.x) * (180 / Math.PI);
   $: rotation = targetAngle + 90;
+  // #endregion
+
+  // Prefab Scripts
+  function fire() {
+    let targetAtOrigin = new Vector(
+      gunOrigin.x - $target.x,
+      gunOrigin.y - $target.y
+    );
+    console.log('target: ', $target.toString());
+    console.log('gunOrigin: ', gunOrigin.toString());
+    console.log('targetAtOrigin: ', targetAtOrigin.toString());
+    // spawn a projectile
+    targetAtOrigin.normalise();
+    let firePoint = targetAtOrigin.clone().mulS(-gunH).add(gunOrigin) as Vector;
+    addToOutline(Missile, { pos: firePoint, id: `missile:${Math.random()}` });
+  }
 </script>
 
 <rect

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { beforeUpdate, onDestroy, onMount } from 'svelte';
   import { Vector } from 'vector2d';
-  import { SCALE } from '../Store/game';
+  import { registerHitBox, SCALE } from '../Store/game';
 
   export let id: string;
   export let pos: Vector;
@@ -11,19 +11,21 @@
   $: height = size * $SCALE;
   $: half = height / 2;
 
-  onMount(() => {
-    // setTimeout(() => {
-    //   removeFromOutline(id);
-    // }, 3000);
+  onMount(() => {});
+
+  beforeUpdate(() => {
+    registerHitBox({
+      id,
+      pos: new Vector(pos.x - half, pos.y - half),
+      size: new Vector(width, height),
+    });
   });
 
-  beforeUpdate(() => {});
-
   onDestroy(() => {
-    console.log('boom');
+    console.log(`Missile with id ${id} removed`);
   });
 </script>
 
 <svg x={pos.x - half} y={pos.y - half} {width} {height}>
-  <circle r={half} cx={half} cy={half} style="fill: red;" />
+  <circle r={half} cx={half} cy={half} style="fill: green;" />
 </svg>
