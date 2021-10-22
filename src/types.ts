@@ -1,4 +1,3 @@
-import type { SvelteComponent, SvelteComponentDev } from 'svelte/internal';
 import type { Vector } from 'vector2d';
 
 export interface GameObjectProps {
@@ -12,6 +11,9 @@ export interface GameObject {
 }
 
 export interface TargetProps extends GameObjectProps {}
+export interface MissileProps extends GameObjectProps {
+  direction: Vector;
+}
 
 export interface HitBox {
   id: string;

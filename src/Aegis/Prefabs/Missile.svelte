@@ -5,13 +5,18 @@
 
   export let id: string;
   export let pos: Vector;
+  export let direction: Vector;
 
   const size = 8;
   $: width = size * $SCALE;
   $: height = size * $SCALE;
   $: half = height / 2;
 
-  onMount(() => {});
+  onMount(() => {
+    setInterval(() => {
+      pos.x += direction.x;
+    }, 300);
+  });
 
   beforeUpdate(() => {
     registerHitBox({

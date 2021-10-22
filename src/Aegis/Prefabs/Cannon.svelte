@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
   import { Vector } from 'vector2d';
+  import type { MissileProps } from '../../types';
   import { addToOutline, SCALE, target } from '../Store/game';
   import Missile from './Missile.svelte';
   export let pos: Vector;
@@ -45,9 +46,14 @@
     console.log('gunOrigin: ', gunOrigin.toString());
     console.log('targetAtOrigin: ', targetAtOrigin.toString());
     // spawn a projectile
-    targetAtOrigin.normalise();
-    let firePoint = targetAtOrigin.clone().mulS(-gunH).add(gunOrigin) as Vector;
-    addToOutline(Missile, { pos: firePoint, id: `missile:${Math.random()}` });
+    const direction = targetAtOrigin.clone().normalise() as Vector;
+    console.log('direction', direction);
+    let firePoint = direction.clone().mulS(-gunH).add(gunOrigin) as Vector;
+    addToOutline<MissileProps>(Missile, {
+      pos: firePoint,
+      id: `missile:${Math.random()}`,
+      direction,
+    });
   }
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { beforeUpdate, onDestroy, onMount } from 'svelte';
-  import { Vector } from 'vector2d';
+  import type { Vector } from 'vector2d';
   import { SCALE } from '../Store/game';
 
   export let id: string;
