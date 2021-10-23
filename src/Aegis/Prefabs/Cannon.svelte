@@ -39,8 +39,8 @@
   // Prefab Scripts
   function fire() {
     let targetAtOrigin = new Vector(
-      gunOrigin.x - $target.x,
-      gunOrigin.y - $target.y
+      -(gunOrigin.x - $target.x),
+      -(gunOrigin.y - $target.y)
     );
     console.log('target: ', $target.toString());
     console.log('gunOrigin: ', gunOrigin.toString());
@@ -48,7 +48,7 @@
     // spawn a projectile
     const direction = targetAtOrigin.clone().normalise() as Vector;
     console.log('direction', direction);
-    let firePoint = direction.clone().mulS(-gunH).add(gunOrigin) as Vector;
+    let firePoint = direction.clone().mulS(gunH).add(gunOrigin) as Vector;
     addToOutline<MissileProps>(Missile, {
       pos: firePoint,
       id: `missile:${Math.random()}`,

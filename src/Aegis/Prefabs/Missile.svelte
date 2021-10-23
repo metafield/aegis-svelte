@@ -11,11 +11,14 @@
   $: width = size * $SCALE;
   $: height = size * $SCALE;
   $: half = height / 2;
+  let speed = 25;
 
   onMount(() => {
+    // TODO: switch out with delta
     setInterval(() => {
-      pos.x += direction.x;
-    }, 300);
+      pos.x += direction.x * speed;
+      pos.y += direction.y * speed;
+    }, 50);
   });
 
   beforeUpdate(() => {
