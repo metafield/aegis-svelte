@@ -14,7 +14,7 @@
   let prevTarget: Vector;
   const unsubscribe = target.subscribe((newTarget) => {
     // do something
-    if (prevTarget) fire();
+    if (prevTarget) fire(newTarget);
     prevTarget = newTarget;
   });
   onDestroy(unsubscribe);
@@ -37,22 +37,24 @@
   // #endregion
 
   // Prefab Scripts
-  function fire() {
+  function fire(target: Vector) {
     let targetAtOrigin = new Vector(
-      -(gunOrigin.x - $target.x),
-      -(gunOrigin.y - $target.y)
+      -(gunOrigin.x - target.x),
+      -(gunOrigin.y - target.y)
     );
-    console.log('target: ', $target.toString());
+    console.log('target: ', target.toString());
     console.log('gunOrigin: ', gunOrigin.toString());
     console.log('targetAtOrigin: ', targetAtOrigin.toString());
     // spawn a projectile
     const direction = targetAtOrigin.clone().normalise() as Vector;
     console.log('direction', direction);
     let firePoint = direction.clone().mulS(gunH).add(gunOrigin) as Vector;
+
     addToOutline<MissileProps>(Missile, {
-      pos: firePoint,
-      id: `missile:${Math.random()}`,
-      direction,
+      pos: firePoint.clone(),
+      id: `missile:${Math.floor(Math.random() * 1000)}`,
+      direction: direction.clone(),
+      target: target.clone(),
     });
   }
 </script>

@@ -1,7 +1,7 @@
-import type { Vector } from 'vector2d';
+import type { AbstractVector, Vector } from 'vector2d';
 
 export interface GameObjectProps {
-  pos: Vector;
+  pos: AbstractVector;
   id: string;
 }
 
@@ -12,7 +12,8 @@ export interface GameObject {
 
 export interface TargetProps extends GameObjectProps {}
 export interface MissileProps extends GameObjectProps {
-  direction: Vector;
+  direction: AbstractVector;
+  target: AbstractVector;
 }
 
 export interface HitBox {
